@@ -57,6 +57,39 @@ function parseDOM(node, previousId) {
                 parseDOM(child, newId);
             }
         });
+
+        // Parse attribute values
+        Object.keys(node.attributes)
+            .forEach((attribute) => {
+                parseDOM(node.attributes[attribute], newId);
+            });
+    }
+
+    // Attributes
+    else if (node.nodeType === 2) {
+        if (hasVariable(node.textContent)) {
+            const { strings, args } = extractVariables(node.textContent);
+
+            let dataIdentifier = node.ownerElement.getAttribute('data-identifier');
+
+            if (!dataIdentifier) {
+                dataIdentifier = newId;
+                node.ownerElement.setAttribute('data-identifier', dataIdentifier);
+            }
+
+            args.forEach((variableName) => {
+                if (!dataIndex[variableName]) {
+                    dataIndex[variableName] = {};
+                }
+
+                dataIndex[variableName][dataIdentifier] = {
+                    type: 'attribute',
+                    attributeName: node.name,
+                    strings,
+                    args,
+                };
+            });
+        }
     }
 
     // Regular strings
@@ -66,8 +99,13 @@ function parseDOM(node, previousId) {
             // 2. Parse the string with `extractVariables`
             const { strings, args } = extractVariables(node.data);
 
-            // 3. Generate a unique id and attribute it to the node
-            node.parentNode.setAttribute('data-identifier', newId);
+            // 3. Pass the parent node a new attribute if necessary
+            let dataIdentifier = node.parentNode.getAttribute('data-identifier');
+
+            if (!dataIdentifier) {
+                dataIdentifier = newId;
+                node.parentNode.setAttribute('data-identifier', dataIdentifier);
+            }
 
             // 4. Update the data index
             args.forEach((variableName) => {
@@ -75,8 +113,12 @@ function parseDOM(node, previousId) {
                     dataIndex[variableName] = {};
                 }
 
-                dataIndex[variableName][newId] = { strings, args };
-            })
+                dataIndex[variableName][dataIdentifier] = {
+                    type: 'content',
+                    strings,
+                    args,
+                };
+            });
         }
     }
 }
