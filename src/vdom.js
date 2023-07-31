@@ -24,29 +24,15 @@ function extractVariables(str) {
     return { strings, args };
 }
 
-function createVDOM(node, previousId) {
+function parseDOM(node, previousId) {
     const newId = previousId + 1;
-    let vNode;
 
     // Regular HTML nodes
     if (node.nodeType === 1) {
-        vNode = {
-            type: 'node',
-            tagName: node.tagName,
-            attributes: {},
-            children: [],
-        }
-
-        // Attributes
-        Object.keys(node.attributes).forEach((child) => {
-            const attribute = node.attributes[child];
-            vNode.attributes[attribute.nodeName] = attribute.nodeValue;
-        });
-
         // Add child nodes
         node.childNodes.forEach((child) => {
             if (node.tagName !== 'SCRIPT') {
-                vNode.children.push(createVDOM(child, newId));
+                parseDOM(child, newId);
             }
         });
     }
@@ -59,7 +45,7 @@ function createVDOM(node, previousId) {
             const { strings, args } = extractVariables(node.data);
 
             // 3. Generate a unique id and attribute it to the node
-            node.parentNode.setAttribute('data-identifier', newId);
+            node.parentNode.setAttribute('data-props-identifier', newId);
 
             // 4. Update the data index
             args.forEach((variableName) => {
@@ -70,14 +56,7 @@ function createVDOM(node, previousId) {
                 dataIndex[variableName][newId] = { strings, args };
             })
         }
-
-        vNode = {
-            type: 'string',
-            content: node.data,
-        };
     }
-
-    return vNode;
 }
 
-export { createVDOM };
+export { parseDOM };

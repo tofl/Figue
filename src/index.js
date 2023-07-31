@@ -1,11 +1,11 @@
-import { createVDOM } from './vdom.js';
+import { parseDOM } from './vdom.js';
 import { data, dataIndex, react } from './data.js';
 
 function init(querySelector) {
     const root = document.querySelector(querySelector);
 
     // 1. Create the virtual DOM
-    createVDOM(root, 0); // TODO return vDOM or not?
+    parseDOM(root, 0); // TODO return vDOM or not?
 
     // 2. Replace all variable calls in the DOM by default values
     for (const variableName of Object.keys(dataIndex)) {
