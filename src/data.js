@@ -14,7 +14,7 @@ const dataIndex = {};
 function react(variableName, nodeIdentifier) {
     const { strings, args } = dataIndex[variableName][nodeIdentifier];
 
-    const element = document.querySelector(`[data-props-identifier="${nodeIdentifier}"]`);
+    const element = document.querySelector(`[data-identifier="${nodeIdentifier}"]`);
 
     let innerText = '';
     strings.forEach((str, i) => {

@@ -1,5 +1,6 @@
 import { parseDOM } from './vdom.js';
 import { data, dataIndex, react } from './data.js';
+import { events } from './events.js';
 
 function init(querySelector) {
     const root = document.querySelector(querySelector);
@@ -15,7 +16,7 @@ function init(querySelector) {
         }
     }
 
-    return { data };
+    return { data, events };
 }
 
 export default init;

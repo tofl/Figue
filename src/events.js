@@ -1,0 +1,3 @@
+const events = {};
+
+export { events };

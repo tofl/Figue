@@ -1,4 +1,5 @@
 import { dataIndex } from './data.js';
+import { events } from './events.js';
 
 function hasVariable(str) {
     return str.indexOf('{{') > -1 && str.indexOf('}}') > -1;
@@ -29,7 +30,28 @@ function parseDOM(node, previousId) {
 
     // Regular HTML nodes
     if (node.nodeType === 1) {
-        // Add child nodes
+        // Get all the event
+        const eventAttributes = [];
+        Object.keys(node.attributes)
+            .forEach((attrId) => {
+                const attr = node.attributes[attrId].name;
+                if (attr.charAt(0) === '@') {
+                    eventAttributes.push(attr);
+                }
+            });
+
+        // Register the event listener
+        eventAttributes.forEach((attr) => {
+            const event = attr.slice(1, attr.length);
+            const eventHandler = node.getAttribute(attr);
+
+            node.addEventListener(event, () => { events[eventHandler]() });
+
+            // Remove the @event attribute from the node
+            node.removeAttribute(attr);
+        });
+
+        // Parse child nodes
         node.childNodes.forEach((child) => {
             if (node.tagName !== 'SCRIPT') {
                 parseDOM(child, newId);
@@ -45,7 +67,7 @@ function parseDOM(node, previousId) {
             const { strings, args } = extractVariables(node.data);
 
             // 3. Generate a unique id and attribute it to the node
-            node.parentNode.setAttribute('data-props-identifier', newId);
+            node.parentNode.setAttribute('data-identifier', newId);
 
             // 4. Update the data index
             args.forEach((variableName) => {
