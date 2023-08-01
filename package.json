@@ -1,14 +1,22 @@
 {
-  "name": "framework",
+  "name": "figue",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "An experimental frontend micro-framework",
+  "main": "src/index.js",
   "scripts": {
     "dev": "parcel index.html"
   },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
     "parcel": "^2.9.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tofl/Figue"
+  },
+  "author": "Tom Flitterman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tofl/Figue/issues"
+  },
+  "homepage": "https://github.com/tofl/Figue#readme"
 }
