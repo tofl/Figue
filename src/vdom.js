@@ -32,33 +32,6 @@ function parseDOM(node) {
 
     // Regular HTML nodes
     if (node.nodeType === 1) {
-        // Get all the event
-        const eventAttributes = [];
-        Object.keys(node.attributes)
-            .forEach((attrId) => {
-                const attr = node.attributes[attrId].name;
-                if (attr.charAt(0) === '@') {
-                    eventAttributes.push(attr);
-                }
-            });
-
-        // Register the event listener
-        eventAttributes.forEach((attr) => {
-            const event = attr.slice(1, attr.length);
-            const eventHandler = node.getAttribute(attr);
-
-            node.addEventListener(event, (e) => {
-                if (events[eventHandler]) {
-                    events[eventHandler](e);
-                } else {
-                    console.error(`The handler \`${eventHandler}\` does not exist.`)
-                }
-            });
-
-            // Remove the @event attribute from the node
-            node.removeAttribute(attr);
-        });
-
         // Parse child nodes
         node.childNodes.forEach((child) => {
             if (node.tagName !== 'SCRIPT') {
@@ -100,6 +73,21 @@ function parseDOM(node) {
                     args,
                 });
             });
+        }
+
+        else if (node.nodeName.charAt(0) === '@') {
+            const eventName = node.nodeName.slice(1, node.nodeName.length);
+            const eventHandler = node.nodeValue;
+
+            node.ownerElement.addEventListener(eventName, (e) => {
+                if (events[eventHandler]) {
+                    events[eventHandler](e);
+                } else {
+                    console.error(`The handler \`${eventHandler}\` does not exist.`)
+                }
+            });
+
+            node.ownerElement.removeAttribute(node.nodeName);
         }
     }
 
