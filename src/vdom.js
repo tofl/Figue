@@ -1,6 +1,8 @@
 import { dataIndex } from './data.js';
 import { events } from './events.js';
 
+let nodeId = 0;
+
 function hasVariable(str) {
     return str.indexOf('{{') > -1 && str.indexOf('}}') > -1;
 }
@@ -25,8 +27,8 @@ function extractVariables(str) {
     return { strings, args };
 }
 
-function parseDOM(node, previousId) {
-    const newId = previousId + 1;
+function parseDOM(node) {
+    nodeId++;
 
     // Regular HTML nodes
     if (node.nodeType === 1) {
@@ -60,28 +62,28 @@ function parseDOM(node, previousId) {
         // Parse child nodes
         node.childNodes.forEach((child) => {
             if (node.tagName !== 'SCRIPT') {
-                parseDOM(child, newId);
+                parseDOM(child);
             }
         });
 
         // Parse attribute values
         Object.keys(node.attributes)
             .forEach((attribute) => {
-                parseDOM(node.attributes[attribute], newId);
+                parseDOM(node.attributes[attribute]);
             });
     }
 
     // Attributes
     else if (node.nodeType === 2) {
         if (hasVariable(node.textContent)) {
-            const { strings, args } = extractVariables(node.textContent);
-
             let dataIdentifier = node.ownerElement.getAttribute('data-identifier');
 
             if (!dataIdentifier) {
-                dataIdentifier = newId;
-                node.ownerElement.setAttribute('data-identifier', dataIdentifier);
+                dataIdentifier = nodeId;
+                node.ownerElement.setAttribute('data-identifier', dataIdentifier.toString());
             }
+
+            const { strings, args } = extractVariables(node.textContent);
 
             args.forEach((variableName) => {
                 if (!dataIndex[variableName]) {
@@ -111,8 +113,8 @@ function parseDOM(node, previousId) {
                 // 3. Give the parent node an identifier
                 let dataIdentifier = parentElement.getAttribute('data-identifier');
                 if (!dataIdentifier) {
-                    dataIdentifier = newId;
-                    parentElement.setAttribute('data-identifier', dataIdentifier);
+                    dataIdentifier = nodeId;
+                    parentElement.setAttribute('data-identifier', dataIdentifier.toString());
                 }
 
                 // 4. Update the dataIndex
