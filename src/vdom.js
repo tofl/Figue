@@ -45,7 +45,13 @@ function parseDOM(node, previousId) {
             const event = attr.slice(1, attr.length);
             const eventHandler = node.getAttribute(attr);
 
-            node.addEventListener(event, () => { events[eventHandler]() });
+            node.addEventListener(event, (e) => {
+                if (events[eventHandler]) {
+                    events[eventHandler](e);
+                } else {
+                    console.error(`The handler \`${eventHandler}\` does not exist.`)
+                }
+            });
 
             // Remove the @event attribute from the node
             node.removeAttribute(attr);
