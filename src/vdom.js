@@ -94,32 +94,39 @@ function parseDOM(node, previousId) {
 
     // Regular strings
     else if (node.nodeType === 3) {
-        // 1. Check that the string contains variables
-        if (hasVariable(node.data)) {
-            // 2. Parse the string with `extractVariables`
-            const { strings, args } = extractVariables(node.data);
+        const parentElement = node.parentElement;
 
-            // 3. Pass the parent node a new attribute if necessary
-            let dataIdentifier = node.parentNode.getAttribute('data-identifier');
+        parentElement.childNodes.forEach((child, i) => {
+            // 1. Analyse all the child nodes, check that they are text and contain variables
+            if (child.nodeType === 3 && child.textContent === node.textContent && hasVariable(node.data)) {
+                // 2. Extract the strings and variables
+                const { strings, args } = extractVariables(node.data);
 
-            if (!dataIdentifier) {
-                dataIdentifier = newId;
-                node.parentNode.setAttribute('data-identifier', dataIdentifier);
-            }
-
-            // 4. Update the data index
-            args.forEach((variableName) => {
-                if (!dataIndex[variableName]) {
-                    dataIndex[variableName] = {};
+                // 3. Give the parent node an identifier
+                let dataIdentifier = parentElement.getAttribute('data-identifier');
+                if (!dataIdentifier) {
+                    dataIdentifier = newId;
+                    parentElement.setAttribute('data-identifier', dataIdentifier);
                 }
 
-                dataIndex[variableName][dataIdentifier] = {
-                    type: 'content',
-                    strings,
-                    args,
-                };
-            });
-        }
+                // 4. Update the dataIndex
+                args.forEach((variableName) => {
+                    if (!dataIndex[variableName]) { dataIndex[variableName] = {} }
+                    if (!dataIndex[variableName][dataIdentifier]) {
+                        dataIndex[variableName][dataIdentifier] = {
+                            type: 'content',
+                            values: [],
+                        };
+                    }
+
+                    dataIndex[variableName][dataIdentifier].values.push({
+                        position: i,
+                        strings,
+                        args,
+                    });
+                });
+            }
+        });
     }
 }
 
