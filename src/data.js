@@ -28,26 +28,28 @@ function react(variableName, nodeIdentifier) {
 
     const element = document.querySelector(`[data-identifier="${nodeIdentifier}"]`);
 
-    if (nodeData.type === 'content') {
-        nodeData.values.forEach((childTextNode) => {
-            let innerText = '';
-            childTextNode.strings.forEach((str, i) => {
-                innerText += childTextNode.strings[i] + (data[childTextNode.args[i]] || '');
+    nodeData.forEach((entry) => {
+        if (entry.type === 'content') {
+            entry.values.forEach((childTextNode) => {
+                let innerText = '';
+                childTextNode.strings.forEach((str, i) => {
+                    innerText += childTextNode.strings[i] + (data[childTextNode.args[i]] || '');
+                });
+
+                element.childNodes[childTextNode.position].textContent = innerText;
             });
 
-            element.childNodes[childTextNode.position].textContent = innerText;
-        });
+        } else if (entry.type === 'attribute') {
+            const { attributeName, strings, args } = entry;
 
-    } else if (nodeData.type === 'attribute') {
-        const { attributeName, strings, args } = nodeData;
+            let innerText = '';
+            strings.forEach((str, i) => {
+                innerText += strings[i] + (data[args[i]] || '');
+            });
 
-        let innerText = '';
-        strings.forEach((str, i) => {
-            innerText += strings[i] + (data[args[i]] || '');
-        });
-
-        element.setAttribute(attributeName, innerText);
-    }
+            element.setAttribute(attributeName, innerText);
+        }
+    });
 }
 
 const data = new Proxy({}, {

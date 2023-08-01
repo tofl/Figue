@@ -89,13 +89,16 @@ function parseDOM(node) {
                 if (!dataIndex[variableName]) {
                     dataIndex[variableName] = {};
                 }
+                if (!dataIndex[variableName][dataIdentifier]) {
+                    dataIndex[variableName][dataIdentifier] = [];
+                }
 
-                dataIndex[variableName][dataIdentifier] = {
+                dataIndex[variableName][dataIdentifier].push({
                     type: 'attribute',
                     attributeName: node.name,
                     strings,
                     args,
-                };
+                });
             });
         }
     }
@@ -121,17 +124,20 @@ function parseDOM(node) {
                 args.forEach((variableName) => {
                     if (!dataIndex[variableName]) { dataIndex[variableName] = {} }
                     if (!dataIndex[variableName][dataIdentifier]) {
-                        dataIndex[variableName][dataIdentifier] = {
-                            type: 'content',
-                            values: [],
-                        };
+                        dataIndex[variableName][dataIdentifier] = [];
                     }
 
-                    dataIndex[variableName][dataIdentifier].values.push({
-                        position: i,
-                        strings,
-                        args,
+                    dataIndex[variableName][dataIdentifier].push({
+                        type: 'content',
+                        values: [
+                            {
+                                position: i,
+                                strings,
+                                args,
+                            },
+                        ],
                     });
+
                 });
             }
         });
