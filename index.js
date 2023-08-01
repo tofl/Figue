@@ -1,6 +1,6 @@
-import { parseDOM } from './vdom.js';
-import { data, dataIndex, react } from './data.js';
-import { events } from './events.js';
+import { parseDOM } from './src/vdom.js';
+import { data, dataIndex, react } from './src/data.js';
+import { events } from './src/events.js';
 
 function init(querySelector) {
     const root = document.querySelector(querySelector);
