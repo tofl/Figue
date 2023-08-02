@@ -19,4 +19,4 @@ function init(querySelector) {
     return { data, events };
 }
 
-export default init;
+window.init = init;
