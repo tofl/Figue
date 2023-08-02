@@ -16,7 +16,7 @@ jobs:
       - name: Move the index to the root folder
         run: mv ./dist/figue.min.js ./index.js
       - name: Delete unnecessary folders
-        run: rm -rf ./dist ./src
+        run: rm -rf ./dist ./src ./.github
       - name: Publish to npm
         run: npm publish
         env:
