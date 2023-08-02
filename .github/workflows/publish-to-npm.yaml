@@ -1,0 +1,23 @@
+name: Publish on npm
+on: [push]
+jobs:
+  publish-npm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+      - name: Install dependencies and build
+        run: npm ci && npm run build
+      - name: Move the index to the root folder
+        run: mv ./dist/figue.min.js ./index.js
+      - name: Delete unnecessary folders
+        run: rm -rf ./dist ./src
+      - name: Publish to npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
