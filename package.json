@@ -4,7 +4,7 @@
   "description": "An experimental frontend micro-framework",
   "scripts": {
     "dev": "./node_modules/.bin/esbuild index.js --outfile=./dist/index.js --bundle --watch",
-    "build": "./node_modules/.bin/esbuild index.js --outfile=index.js --bundle --minify"
+    "build": "./node_modules/.bin/esbuild index.js --outfile=index.js --bundle --minify --allow-overwrite"
   },
   "repository": {
     "type": "git",
