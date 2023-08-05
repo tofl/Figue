@@ -1,22 +1,20 @@
-import { parseDOM } from './src/vdom.js';
+import { parseDOM } from './src/parsing.js';
 import { data, dataIndex, react } from './src/data.js';
-import { events } from './src/events.js';
 
 function init(querySelector) {
     const root = document.querySelector(querySelector);
 
-    // 1. Create the virtual DOM
+    // 1. Parse the DOM
     parseDOM(root);
 
-    // 2. Replace all variable calls in the DOM by default values
+    // 2. Replace all variable calls in the DOM by default values (empty strings at this stage)
     for (const variableName of Object.keys(dataIndex)) {
-        // react(variableName, dataIndex[]);
         for (const identifier of Object.keys(dataIndex[variableName])) {
             react(variableName, identifier);
         }
     }
 
-    return { data, events };
+    return data;
 }
 
-window.init = init;
+window.initFigue = init;

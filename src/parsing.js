@@ -1,5 +1,4 @@
 import { dataIndex } from './data.js';
-import { events } from './events.js';
 
 let nodeId = 0;
 
@@ -80,8 +79,8 @@ function parseDOM(node) {
             const eventHandler = node.nodeValue;
 
             node.ownerElement.addEventListener(eventName, (e) => {
-                if (events[eventHandler]) {
-                    events[eventHandler](e);
+                if (_[eventHandler]) {
+                    _[eventHandler](e);
                 } else {
                     console.error(`The handler \`${eventHandler}\` does not exist.`)
                 }
@@ -125,7 +124,6 @@ function parseDOM(node) {
                             },
                         ],
                     });
-
                 });
             }
         });

@@ -51,19 +51,19 @@ Then, import it as a module:
 
 ### Initialisation
 
-To initialize the app, simply use the `init()` function after importing the framework as shown above. It takes in a CSS selector as its only argument and returns a `data` and `events` object.
+To initialize the app, simply use the `initFigue()` function after importing the framework as shown above. It takes in a CSS selector as its only argument and returns an `_` object.
 ```javascript
-const { data, events } = init('html');
+const _ = initFigue('html');
 ```
 
 ### Adding reactive state
 
-You can declare reactive state and methods by simply adding keys to the `data` object.
+You can declare reactive state and methods by simply adding keys to the `_` object.
 ```javascript
-const { data } = init('html');
+const _ = initFigue('html');
 
-data.firstname = 'John';
-data.lastname = 'Doe';
+_.firstname = 'John';
+_.lastname = 'Doe';
 ```
 
 Then, just call these properties from the template by using curly braces:
@@ -73,17 +73,17 @@ Then, just call these properties from the template by using curly braces:
 
 ### Manage events
 
-It is very easy to handle common events with Figue. Simply append an event handler to the `events` object in the script section and reference the event name as an attribute starting with an `@` (and the event handler as its value) in the template.
+It is very easy to handle common events with Figue. Simply append an event handler to the `_` object in the script section and reference the event name as an attribute starting with an `@` (and the event handler as its value) in the template.
 ```html
 <body>
     <h1>Hello, {{ firstname }}</h1>
     <input type="text" @keyup="updateFirstname" />
     
     <script>
-        const { data, events } = init('body');
+        const _ = initFigue('body');
         
-        data.firstname = '';
-        events.updateFirstname = (event) => {
+        _.firstname = '';
+        _.updateFirstname = (event) => {
             data.firstname = event.target.value;
         };
     </script>
@@ -99,15 +99,6 @@ Figue supports any event type supported by the `addEventListener()` method, prec
 Although being as simple and light as possible is a requirement for Figue, there is still lots of room for improvement and new functionalities.
 
 - Adding Vue-style refs to quickly and easily reference HTML attributes instead of using `document.querySelector()`.
-- Merging the `data` and `events` objects into one object callable with the `_` character, as such:
-    ```javascript
-    const _ = init('body');
-
-    _.firstname = '';
-    _.updateFirstname = (event) => {
-        _.firstname = event.target.value;
-    };
-    ```
 - Executing Javascript code within the template, using the `{{ ... }}` syntax.
 - Adding conditional rendering and loops within the template.
 - Rewriting the framework in Typescript.

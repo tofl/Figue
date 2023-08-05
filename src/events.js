@@ -1,3 +1,0 @@
-const events = {};
-
-export { events };
