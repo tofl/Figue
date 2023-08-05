@@ -1,13 +1,13 @@
 {
   "name": "@tofl/figue",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An experimental frontend micro-framework",
   "main": "dist/figue.min.js",
   "scripts": {
-    "dev": "parcel build index.js --target default",
+    "dev": "parcel index.html --target default",
     "build": "parcel build index.js --no-source-maps"
   },
-  "default": "dist/index.js",
+  "default": "dist/index.html",
   "targets": {
     "default": {}
   },
