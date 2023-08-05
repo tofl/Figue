@@ -13,10 +13,8 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - name: Install dependencies and build
         run: npm ci && npm run build
-      - name: Move the index to the root folder
-        run: mv ./dist/figue.min.js ./index.js
       - name: Delete unnecessary folders
-        run: rm -rf ./dist ./src ./.github
+        run: rm -rf ./src ./.github
       - name: Publish to npm
         run: npm publish
         env:

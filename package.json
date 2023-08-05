@@ -2,17 +2,9 @@
   "name": "@tofl/figue",
   "version": "1.0.1",
   "description": "An experimental frontend micro-framework",
-  "main": "dist/figue.min.js",
   "scripts": {
-    "dev": "parcel index.html --target default",
-    "build": "parcel build index.js --no-source-maps"
-  },
-  "default": "dist/index.html",
-  "targets": {
-    "default": {}
-  },
-  "devDependencies": {
-    "parcel": "^2.9.3"
+    "dev": "./node_modules/.bin/esbuild index.js --outfile=./dist/index.js --bundle --watch",
+    "build": "./node_modules/.bin/esbuild _index.js --outfile=index.js --bundle --minify"
   },
   "repository": {
     "type": "git",
@@ -23,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/tofl/Figue/issues"
   },
-  "homepage": "https://github.com/tofl/Figue#readme"
+  "homepage": "https://github.com/tofl/Figue#readme",
+  "devDependencies": {
+    "esbuild": "^0.18.17"
+  }
 }
